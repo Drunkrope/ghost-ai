@@ -4,19 +4,20 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Feature 01: Design System — complete
+- Feature 02: Editor Chrome — complete
 
 ## Current Goal
 
-- Define the immediate implementation goal here.
+- Implement editor chrome: navbar and project sidebar shell (feature 02).
 
 ## Completed
 
 - 01-design-system: shadcn/ui (base-nova preset, Tailwind v4), Button/Card/Dialog/Input/Tabs/Textarea/ScrollArea components, lucide-react, lib/utils.ts cn() helper, globals.css dark theme variables.
+- 02-editor-chrome: `components/editor/editor-navbar.tsx` (fixed top navbar, sidebar toggle with PanelLeftOpen/PanelLeftClose, dark bg + bottom border), `components/editor/project-sidebar.tsx` (floating overlay, slides in from left, isOpen prop, Projects header + close button, My Projects / Shared tabs with empty states, New Project button). Dialog pattern is ready for use via existing `components/ui/dialog.tsx` which consumes globals.css color tokens.
 
 ## In Progress
 
-- None yet.
+- None.
 
 ## Next Up
 
