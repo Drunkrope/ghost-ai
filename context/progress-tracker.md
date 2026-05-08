@@ -4,16 +4,17 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Feature 02: Editor Chrome — complete
+- Feature 03: Auth — complete
 
 ## Current Goal
 
-- Implement editor chrome: navbar and project sidebar shell (feature 02).
+- Implement Clerk authentication: provider, auth pages, redirects, route protection, and user menu (feature 03).
 
 ## Completed
 
 - 01-design-system: shadcn/ui (base-nova preset, Tailwind v4), Button/Card/Dialog/Input/Tabs/Textarea/ScrollArea components, lucide-react, lib/utils.ts cn() helper, globals.css dark theme variables.
 - 02-editor-chrome: `components/editor/editor-navbar.tsx` (fixed top navbar, sidebar toggle with PanelLeftOpen/PanelLeftClose, dark bg + bottom border), `components/editor/project-sidebar.tsx` (floating overlay, slides in from left, isOpen prop, Projects header + close button, My Projects / Shared tabs with empty states, New Project button). Dialog pattern is ready for use via existing `components/ui/dialog.tsx` which consumes globals.css color tokens.
+- 03-auth: `proxy.ts` (protected-first Clerk middleware, public routes from env vars), `ClerkProvider` wrapping root layout with `dark` theme and CSS variable appearance overrides, `app/sign-in/[[...sign-in]]/page.tsx` and `app/sign-up/[[...sign-up]]/page.tsx` (two-panel layout: left logo/tagline/features on large screens, Clerk form right/full on mobile), root `app/page.tsx` redirects authenticated → `/editor`, unauthenticated → `/sign-in`, `UserButton` in editor navbar right section.
 
 ## In Progress
 
@@ -21,7 +22,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Next Up
 
-- Add the next planned feature unit here.
+- Feature 04 (TBD).
 
 ## Open Questions
 
