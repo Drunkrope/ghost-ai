@@ -27,7 +27,7 @@ export async function DELETE(req: Request) {
   const { isAuthenticated, has } = await auth();
   if (!isAuthenticated) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const isAdmin = await has({ role: 'org:admin' });
+  const isAdmin = has({ role: 'org:admin' });
   if (!isAdmin) return Response.json({ error: 'Forbidden' }, { status: 403 });
 
   return Response.json({ success: true });
@@ -38,11 +38,11 @@ export async function DELETE(req: Request) {
 
 ```typescript
 export async function GET(req: Request, { params }: { params: { orgId: string } }) {
-  const { userId, orgId } = await auth();
+  const { userId, has } = await auth();
   if (!userId) return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  if (orgId !== params.orgId) return Response.json({ error: 'Forbidden' }, { status: 403 });
+  if (!has({ orgId: params.orgId })) return Response.json({ error: 'Forbidden' }, { status: 403 });
 
-  const orgData = await db.orgs.findUnique({ where: { id: orgId } });
+  const orgData = await db.orgs.findUnique({ where: { id: params.orgId } });
   return Response.json(orgData);
 }
 ```

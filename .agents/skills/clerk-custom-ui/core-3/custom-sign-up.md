@@ -166,18 +166,17 @@ export default function SignUpPage() {
     // For email OTP: collect the email address instead of the phone number
     const phoneNumber = formData.get('phoneNumber') as string
 
-    // For email OTP: change create({ phoneNumber }) to create({ emailAddress })
-    const error = await signUp.create({ phoneNumber })
+    // For email OTP: use sendEmailCode({ emailAddress }) instead
+    const { error } = await signUp.verifications.sendPhoneCode({ phoneNumber })
 
-    // For email OTP: change sendPhoneCode() to sendEmailCode()
-    if (!error) await signUp.verifications.sendPhoneCode()
+    if (error) return
   }
 
   const handleVerify = async (formData: FormData) => {
     const code = formData.get('code') as string
 
     // For email OTP: change verifyPhoneCode() to verifyEmailCode()
-    await signUp.verifications.verifyPhoneCode({ code })
+    const { error } = await signUp.verifications.verifyPhoneCode({ code })
 
     if (signUp.status === 'complete') {
       await signUp.finalize({
@@ -206,7 +205,7 @@ export default function SignUpPage() {
 
   if (
     signUp.status === 'missing_requirements' &&
-    // For email OTP: check for phone_number instead of email_address
+    // For email OTP: check for email_address instead of phone_number
     signUp.unverifiedFields.includes('phone_number') &&
     signUp.missingFields.length === 0
   ) {
@@ -218,7 +217,7 @@ export default function SignUpPage() {
             <label htmlFor="code">Code</label>
             <input id="code" name="code" type="text" />
           </div>
-          {errors.fields.code && <p>{errors.fields.code.message}</p>}
+          {errors?.fields?.code && <p>{errors?.fields?.code?.message}</p>}
           <button type="submit" disabled={fetchStatus === 'fetching'}>
             Verify
           </button>
@@ -237,7 +236,7 @@ export default function SignUpPage() {
         <div>
           <label htmlFor="phoneNumber">Phone number</label>
           <input id="phoneNumber" name="phoneNumber" type="tel" />
-          {errors.fields.phoneNumber && <p>{errors.fields.phoneNumber.message}</p>}
+          {errors?.fields?.phoneNumber && <p>{errors?.fields?.phoneNumber?.message}</p>}
         </div>
         <button type="submit" disabled={fetchStatus === 'fetching'}>
           Continue
