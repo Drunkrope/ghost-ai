@@ -25,27 +25,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      appearance={{
-        theme: dark,
-        variables: {
-          colorPrimary: "var(--accent-primary)",
-          colorBackground: "var(--bg-base)",
-          colorInput: "var(--bg-subtle)",
-          colorForeground: "var(--text-primary)",
-          colorMutedForeground: "var(--text-secondary)",
-          colorNeutral: "var(--text-muted)",
-          colorDanger: "var(--state-error)",
-          borderRadius: "var(--radius)",
-        },
-      }}
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <html
-        lang="en"
-        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      >
-        <body className="min-h-full flex flex-col">{children}</body>
-      </html>
-    </ClerkProvider>
+      <body className="min-h-full flex flex-col">
+        <ClerkProvider
+          appearance={{
+            theme: dark,
+            variables: {
+              colorPrimary: "var(--accent-primary)",
+              colorBackground: "var(--bg-base)",
+              colorInput: "var(--bg-subtle)",
+              colorForeground: "var(--text-primary)",
+              colorMutedForeground: "var(--text-secondary)",
+              colorNeutral: "var(--text-muted)",
+              colorDanger: "var(--state-error)",
+              borderRadius: "var(--radius)",
+            },
+          }}
+        >
+          {children}
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

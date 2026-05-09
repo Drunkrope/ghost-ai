@@ -46,6 +46,7 @@ export async function updateProfile(formData: FormData) {
 
 ```typescript
 const { orgId } = await auth();
+if (!orgId) return <div>No organization selected</div>;
 const getOrgData = unstable_cache(
   () => db.orgData.findMany({ where: { organizationId: orgId } }),
   [`org-${orgId}-data`],
