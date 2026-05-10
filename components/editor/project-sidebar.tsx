@@ -10,7 +10,8 @@ import type { Project } from "@/types/project"
 interface ProjectSidebarProps {
   isOpen: boolean
   onClose: () => void
-  projects: Project[]
+  ownedProjects: Project[]
+  sharedProjects: Project[]
   onNewProject: () => void
   onRenameProject: (project: Project) => void
   onDeleteProject: (project: Project) => void
@@ -19,14 +20,12 @@ interface ProjectSidebarProps {
 export function ProjectSidebar({
   isOpen,
   onClose,
-  projects,
+  ownedProjects,
+  sharedProjects,
   onNewProject,
   onRenameProject,
   onDeleteProject,
 }: ProjectSidebarProps) {
-  const ownedProjects = projects.filter((p) => p.isOwned)
-  const sharedProjects = projects.filter((p) => !p.isOwned)
-
   return (
     <>
       {/* Mobile backdrop scrim */}
@@ -119,7 +118,7 @@ interface ProjectItemProps {
 }
 
 function ProjectItem({ project, onRename, onDelete }: ProjectItemProps) {
-  const showActions = project.isOwned && (onRename || onDelete)
+  const showActions = onRename || onDelete
 
   return (
     <li className="group flex items-center gap-1 rounded-xl px-2 py-1.5 hover:bg-subtle">

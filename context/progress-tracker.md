@@ -4,11 +4,11 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Feature 05: Prisma Schema & Data Layer — complete
+- Feature 07: Wire Editor Home — complete
 
 ## Current Goal
 
-- Add project data models, Prisma client singleton, and first migration (feature 05).
+- None.
 
 ## Completed
 
@@ -17,6 +17,8 @@ Update this file whenever the current phase, active feature, or implementation s
 - 03-auth: `proxy.ts` (protected-first Clerk middleware, public routes from env vars), `ClerkProvider` wrapping root layout with `dark` theme and CSS variable appearance overrides, `app/sign-in/[[...sign-in]]/page.tsx` and `app/sign-up/[[...sign-up]]/page.tsx` (two-panel layout: left logo/tagline/features on large screens, Clerk form right/full on mobile), root `app/page.tsx` redirects authenticated → `/editor`, unauthenticated → `/sign-in`, `UserButton` in editor navbar right section.
 - 04-project-dialogs: `types/project.ts` (Project interface), `lib/mock-projects.ts` (3 mock projects, 2 owned + 1 shared), `hooks/use-project-dialogs.ts` (dialog/form/loading state, slug derivation, mock async submit), `components/editor/editor-context.tsx` (React context exposing `openCreate` to children), `components/editor/project-dialogs.tsx` (Create with live slug preview, Rename with prefill + auto-focus + Enter submit, Delete with destructive button), updated `components/editor/project-sidebar.tsx` (project list in My Projects/Shared tabs, owned-only hover-reveal Rename/Trash actions, mobile backdrop scrim, New Project footer wired), updated `components/editor/editor-shell.tsx` (provides EditorContext, mounts ProjectDialogs), updated `app/editor/page.tsx` (editor home: heading + description + New Project button wired to Create dialog via context).
 - 05-prisma: `prisma/models/project.prisma` (Project model with ownerId/name/description/status enum/canvasJsonPath/timestamps and indexes on ownerId+createdAt; ProjectCollaborator with cascade delete, unique projectId+email, indexes on email and projectId+createdAt), `lib/prisma.ts` (cached singleton branching on DATABASE_URL prefix: `prisma+postgres://` → Accelerate via `withAccelerate`, otherwise `@prisma/adapter-pg`; global cache for dev hot-reloads), migration `20260509235103_init_projects` applied, client generated to `app/generated/prisma`.
+- 06-project-apis: `app/api/projects/route.ts` (GET lists owner's projects ordered by createdAt desc; POST creates with name defaulting to "Untitled Project"), `app/api/projects/[projectId]/route.ts` (PATCH renames — 401/403/404 enforced; DELETE — 401/403/404 enforced, returns 204). Fixed `lib/prisma.ts` union type issue by casting Accelerate-extended client to `PrismaClient` so route handlers resolve `findUnique` correctly.
+- 07-wire-editor-home: `lib/projects.ts` (getOwnedProjects/getSharedProjects server helpers using auth()/currentUser()); `hooks/use-project-actions.ts` (replaces mock useProjectDialogs — manages dialog state, calls POST/PATCH/DELETE APIs, navigates to new workspace on create, refreshes or redirects on rename/delete, slug+suffix preview); `app/editor/layout.tsx` (async RSC, fetches both project lists, passes to EditorShell); `app/editor/page.tsx` (converted to RSC); `components/editor/new-project-button.tsx` (client sub-component for the CTA button); `components/editor/editor-shell.tsx` (accepts initialOwnedProjects/initialSharedProjects); `components/editor/project-sidebar.tsx` (accepts ownedProjects/sharedProjects separately); `types/project.ts` (simplified to {id, name}). Removed mock-projects.ts and use-project-dialogs.ts.
 
 ## In Progress
 
@@ -24,7 +26,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Next Up
 
-- Feature 06 (TBD).
+- Feature 08 (TBD).
 
 ## Open Questions
 

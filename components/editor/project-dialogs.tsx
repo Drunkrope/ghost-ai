@@ -12,10 +12,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import type { UseProjectDialogsReturn } from "@/hooks/use-project-dialogs"
+import type { UseProjectActionsReturn } from "@/hooks/use-project-actions"
 
 interface ProjectDialogsProps {
-  dialogs: UseProjectDialogsReturn
+  dialogs: UseProjectActionsReturn
 }
 
 export function ProjectDialogs({ dialogs }: ProjectDialogsProps) {
