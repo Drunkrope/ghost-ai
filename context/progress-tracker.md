@@ -4,11 +4,11 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Feature 04: Project Dialogs & Editor Home — complete
+- Feature 05: Prisma Schema & Data Layer — complete
 
 ## Current Goal
 
-- Implement editor home screen, project CRUD dialogs, sidebar project items with rename/delete actions, and mobile backdrop (feature 04).
+- Add project data models, Prisma client singleton, and first migration (feature 05).
 
 ## Completed
 
@@ -16,6 +16,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - 02-editor-chrome: `components/editor/editor-navbar.tsx` (fixed top navbar, sidebar toggle with PanelLeftOpen/PanelLeftClose, dark bg + bottom border), `components/editor/project-sidebar.tsx` (floating overlay, slides in from left, isOpen prop, Projects header + close button, My Projects / Shared tabs with empty states, New Project button). Dialog pattern is ready for use via existing `components/ui/dialog.tsx` which consumes globals.css color tokens.
 - 03-auth: `proxy.ts` (protected-first Clerk middleware, public routes from env vars), `ClerkProvider` wrapping root layout with `dark` theme and CSS variable appearance overrides, `app/sign-in/[[...sign-in]]/page.tsx` and `app/sign-up/[[...sign-up]]/page.tsx` (two-panel layout: left logo/tagline/features on large screens, Clerk form right/full on mobile), root `app/page.tsx` redirects authenticated → `/editor`, unauthenticated → `/sign-in`, `UserButton` in editor navbar right section.
 - 04-project-dialogs: `types/project.ts` (Project interface), `lib/mock-projects.ts` (3 mock projects, 2 owned + 1 shared), `hooks/use-project-dialogs.ts` (dialog/form/loading state, slug derivation, mock async submit), `components/editor/editor-context.tsx` (React context exposing `openCreate` to children), `components/editor/project-dialogs.tsx` (Create with live slug preview, Rename with prefill + auto-focus + Enter submit, Delete with destructive button), updated `components/editor/project-sidebar.tsx` (project list in My Projects/Shared tabs, owned-only hover-reveal Rename/Trash actions, mobile backdrop scrim, New Project footer wired), updated `components/editor/editor-shell.tsx` (provides EditorContext, mounts ProjectDialogs), updated `app/editor/page.tsx` (editor home: heading + description + New Project button wired to Create dialog via context).
+- 05-prisma: `prisma/models/project.prisma` (Project model with ownerId/name/description/status enum/canvasJsonPath/timestamps and indexes on ownerId+createdAt; ProjectCollaborator with cascade delete, unique projectId+email, indexes on email and projectId+createdAt), `lib/prisma.ts` (cached singleton branching on DATABASE_URL prefix: `prisma+postgres://` → Accelerate via `withAccelerate`, otherwise `@prisma/adapter-pg`; global cache for dev hot-reloads), migration `20260509235103_init_projects` applied, client generated to `app/generated/prisma`.
 
 ## In Progress
 
@@ -23,7 +24,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Next Up
 
-- Feature 05 (TBD).
+- Feature 06 (TBD).
 
 ## Open Questions
 
