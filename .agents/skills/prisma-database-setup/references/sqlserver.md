@@ -91,4 +91,4 @@ Use a driver adapter for the standard SQL workflow.
 - Ensure TCP/IP is enabled in SQL Server Configuration Manager.
 
 ### "Table not found" (dbo schema)
-Prisma assumes `dbo` schema by default. If using another schema, update the model or connection string? SQL Server provider mostly sticks to default schema.
+Prisma assumes `dbo` schema by default. If you're using a schema other than dbo, update your Prisma model or connection string to reference the correct schema. SQL Server provider mostly sticks to default schema.

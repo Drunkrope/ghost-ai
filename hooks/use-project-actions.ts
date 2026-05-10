@@ -27,6 +27,7 @@ export function useProjectActions() {
   const [nameInput, setNameInput] = useState("")
   const [roomSuffix, setRoomSuffix] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const slugPreview = nameInput.trim()
     ? `${toSlug(nameInput)}-${roomSuffix}`
@@ -68,6 +69,7 @@ export function useProjectActions() {
   async function submitCreate() {
     if (isLoading || !nameInput.trim()) return
     setIsLoading(true)
+    setError(null)
     const currentDialog = openDialog
     try {
       const res = await fetch("/api/projects", {
@@ -75,10 +77,19 @@ export function useProjectActions() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: nameInput.trim() }),
       })
-      if (!res.ok) throw new Error("Failed to create project")
+
+      if (!res.ok) {
+        const payload = await res.json().catch(() => null)
+        const message =
+          payload?.error || payload?.message || `Failed to create project (${res.status})`
+        throw new Error(message)
+      }
+
       const project: Project = await res.json()
       closeDialogIfCurrent(currentDialog)
       router.push(`/editor/${project.id}`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to create project")
     } finally {
       setIsLoading(false)
     }
@@ -87,6 +98,7 @@ export function useProjectActions() {
   async function submitRename() {
     if (isLoading || !nameInput.trim() || !targetProject) return
     setIsLoading(true)
+    setError(null)
     const currentDialog = openDialog
     try {
       const res = await fetch(`/api/projects/${targetProject.id}`, {
@@ -94,9 +106,18 @@ export function useProjectActions() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: nameInput.trim() }),
       })
-      if (!res.ok) throw new Error("Failed to rename project")
+
+      if (!res.ok) {
+        const payload = await res.json().catch(() => null)
+        const message =
+          payload?.error || payload?.message || `Failed to rename project (${res.status})`
+        throw new Error(message)
+      }
+
       closeDialogIfCurrent(currentDialog)
       router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to rename project")
     } finally {
       setIsLoading(false)
     }
@@ -130,6 +151,7 @@ export function useProjectActions() {
     setNameInput,
     slugPreview,
     isLoading,
+    error,
     openCreate,
     openRename,
     openDelete,

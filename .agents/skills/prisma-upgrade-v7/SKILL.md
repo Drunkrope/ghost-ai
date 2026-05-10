@@ -43,6 +43,8 @@ Reference this skill when:
 
 ## Important Notes
 
+> **Warning:** Prisma v7 does NOT support MongoDB — stay on Prisma 6.19. MongoDB projects should stay on Prisma 6.x.
+
 - **MongoDB projects should stay on Prisma 6.x** - do not migrate MongoDB apps to Prisma 7's SQL client path
 - **Node.js 20.19.0+** required
 - **TypeScript 5.4.0+** required
@@ -97,7 +99,7 @@ npx prisma generate
 
 Detailed migration guides for each breaking change:
 
-```
+```text
 references/esm-support.md        - ESM and CommonJS configuration
 references/schema-changes.md     - Generator, output, imports, and generated entrypoints
 references/driver-adapters.md    - Required driver adapter setup
