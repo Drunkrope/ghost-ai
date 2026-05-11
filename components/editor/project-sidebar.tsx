@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { Pencil, Plus, Trash2, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -12,6 +13,7 @@ interface ProjectSidebarProps {
   onClose: () => void
   ownedProjects: Project[]
   sharedProjects: Project[]
+  activeProjectId?: string
   onNewProject: () => void
   onRenameProject: (project: Project) => void
   onDeleteProject: (project: Project) => void
@@ -22,6 +24,7 @@ export function ProjectSidebar({
   onClose,
   ownedProjects,
   sharedProjects,
+  activeProjectId,
   onNewProject,
   onRenameProject,
   onDeleteProject,
@@ -74,6 +77,7 @@ export function ProjectSidebar({
                     <ProjectItem
                       key={project.id}
                       project={project}
+                      isActive={project.id === activeProjectId}
                       onRename={onRenameProject}
                       onDelete={onDeleteProject}
                     />
@@ -92,7 +96,11 @@ export function ProjectSidebar({
               ) : (
                 <ul className="p-2">
                   {sharedProjects.map((project) => (
-                    <ProjectItem key={project.id} project={project} />
+                    <ProjectItem
+                      key={project.id}
+                      project={project}
+                      isActive={project.id === activeProjectId}
+                    />
                   ))}
                 </ul>
               )}
@@ -113,20 +121,24 @@ export function ProjectSidebar({
 
 interface ProjectItemProps {
   project: Project
+  isActive?: boolean
   onRename?: (project: Project) => void
   onDelete?: (project: Project) => void
 }
 
-function ProjectItem({ project, onRename, onDelete }: ProjectItemProps) {
+function ProjectItem({ project, isActive, onRename, onDelete }: ProjectItemProps) {
   const showActions = onRename || onDelete
 
   return (
-    <li className="group flex items-center gap-1 rounded-xl px-2 py-1.5 hover:bg-subtle">
-      <span className="flex-1 truncate text-sm text-copy-secondary">
+    <li className={`group flex items-center gap-1 rounded-xl hover:bg-subtle ${isActive ? "bg-accent-dim" : ""}`}>
+      <Link
+        href={`/editor/${project.id}`}
+        className={`flex-1 truncate px-2 py-1.5 text-sm ${isActive ? "font-medium text-brand" : "text-copy-secondary"}`}
+      >
         {project.name}
-      </span>
+      </Link>
       {showActions && (
-        <div className="flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="flex shrink-0 items-center gap-0.5 pr-1 opacity-0 transition-opacity group-hover:opacity-100">
           {onRename && (
             <Button
               variant="ghost"

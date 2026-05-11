@@ -4,7 +4,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Feature 07: Wire Editor Home — complete
+- Feature 09: Share Dialog — complete
 
 ## Current Goal
 
@@ -18,15 +18,18 @@ Update this file whenever the current phase, active feature, or implementation s
 - 04-project-dialogs: `types/project.ts` (Project interface), `lib/mock-projects.ts` (3 mock projects, 2 owned + 1 shared), `hooks/use-project-dialogs.ts` (dialog/form/loading state, slug derivation, mock async submit), `components/editor/editor-context.tsx` (React context exposing `openCreate` to children), `components/editor/project-dialogs.tsx` (Create with live slug preview, Rename with prefill + auto-focus + Enter submit, Delete with destructive button), updated `components/editor/project-sidebar.tsx` (project list in My Projects/Shared tabs, owned-only hover-reveal Rename/Trash actions, mobile backdrop scrim, New Project footer wired), updated `components/editor/editor-shell.tsx` (provides EditorContext, mounts ProjectDialogs), updated `app/editor/page.tsx` (editor home: heading + description + New Project button wired to Create dialog via context).
 - 05-prisma: `prisma/models/project.prisma` (Project model with ownerId/name/description/status enum/canvasJsonPath/timestamps and indexes on ownerId+createdAt; ProjectCollaborator with cascade delete, unique projectId+email, indexes on email and projectId+createdAt), `lib/prisma.ts` (cached singleton branching on DATABASE_URL prefix: `prisma+postgres://` → Accelerate via `withAccelerate`, otherwise `@prisma/adapter-pg`; global cache for dev hot-reloads), migration `20260509235103_init_projects` applied, client generated to `app/generated/prisma`.
 - 06-project-apis: `app/api/projects/route.ts` (GET lists owner's projects ordered by createdAt desc; POST creates with name defaulting to "Untitled Project"), `app/api/projects/[projectId]/route.ts` (PATCH renames — 401/403/404 enforced; DELETE — 401/403/404 enforced, returns 204). Fixed `lib/prisma.ts` union type issue by casting Accelerate-extended client to `PrismaClient` so route handlers resolve `findUnique` correctly.
-- 07-wire-editor-home: `lib/projects.ts` (getOwnedProjects/getSharedProjects server helpers using auth()/currentUser()); `hooks/use-project-actions.ts` (replaces mock useProjectDialogs — manages dialog state, calls POST/PATCH/DELETE APIs, navigates to new workspace on create, refreshes or redirects on rename/delete, slug+suffix preview); `app/editor/layout.tsx` (async RSC, fetches both project lists, passes to EditorShell); `app/editor/page.tsx` (converted to RSC); `components/editor/new-project-button.tsx` (client sub-component for the CTA button); `components/editor/editor-shell.tsx` (accepts initialOwnedProjects/initialSharedProjects); `components/editor/project-sidebar.tsx` (accepts ownedProjects/sharedProjects separately); `types/project.ts` (simplified to {id, name}). Removed mock-projects.ts and use-project-dialogs.ts.
+- 07-wire-editor-home: `lib/projects.ts` (getOwnedProjects/getSharedProjects server helpers using auth()/currentUser()); `hooks/use-project-actions.ts` (replaces mock useProjectDialogs — manages dialog state, calls POST/PATCH/DELETE APIs, navigates to new workspace on create, refreshes or redirects on rename/delete, slug+suffix preview); `app/editor/(home)/layout.tsx` (async RSC, fetches both project lists, passes to EditorShell); `app/editor/(home)/page.tsx` (converted to RSC); `components/editor/new-project-button.tsx` (client sub-component for the CTA button); `components/editor/editor-shell.tsx` (accepts initialOwnedProjects/initialSharedProjects); `components/editor/project-sidebar.tsx` (accepts ownedProjects/sharedProjects separately); `types/project.ts` (simplified to {id, name}). Removed mock-projects.ts and use-project-dialogs.ts.
+- 08-editor-workspace-shell: `lib/project-access.ts` (getCurrentIdentity returns userId+email via Clerk; getProjectWithAccess checks ownership then collaborator table); `components/editor/access-denied.tsx` (centered lock icon, message, back link); `components/editor/workspace-navbar.tsx` (project name in center, share button + AI toggle on right, sidebar toggle on left); `components/editor/workspace-shell.tsx` (client shell managing sidebar + AI panel state, renders WorkspaceNavbar, ProjectSidebar, canvas placeholder, AI sidebar placeholder); `components/editor/project-sidebar.tsx` (added optional activeProjectId prop — highlights active room with bg-accent-dim + text-brand); `app/editor/[roomId]/page.tsx` (server RSC: redirects unauthenticated to /sign-in, shows AccessDenied for missing/unauthorized projects, fetches project lists and renders WorkspaceShell); restructured `app/editor/layout.tsx` + `page.tsx` into `app/editor/(home)/` route group so workspace has its own standalone layout.
 
 ## In Progress
 
 - None.
 
+- 09-share-dialog: `app/api/projects/[projectId]/collaborators/route.ts` (GET lists collaborators enriched with Clerk firstName/lastName/imageUrl via getUserList; POST invites by email with upsert, returns enriched record; DELETE removes by email — both POST/DELETE owner-only 401/403/404); `components/editor/share-dialog.tsx` (dialog with copy-link section, invite form for owners, collaborator list with avatar/name/email, remove button per row, Copied! feedback); `components/editor/workspace-shell.tsx` (added isOwner prop, shareOpen state, renders ShareDialog); `components/editor/workspace-navbar.tsx` (added onShareClick prop, wired to Share button); `app/editor/[roomId]/page.tsx` (computes isOwner = project.ownerId === identity.userId, passes to WorkspaceShell).
+
 ## Next Up
 
-- Feature 08 (TBD).
+- Feature 10 (TBD).
 
 ## Open Questions
 
